@@ -3,6 +3,7 @@ from pygame.locals import *
 import random
 
 pg.init()
+pg.font.init()
 
 s = pg.display.set_mode((800, 800))
 pg.display.set_caption("ZHero")
@@ -10,6 +11,7 @@ clock = pg.time.Clock()
 
 BG = [70, 50, 100]  # a Tuple is very similar to a List, just the symbol & changeability differ!!!!
 WHITE = (255, 255, 255)
+FONT = pg.font.SysFont('Comic Sans MS', 20)
 
 def color_generator():
     output = [random.randint(150, 255) for n in range(3)] # try using parenthesis instead of brackets!! see the console
@@ -35,6 +37,10 @@ class ProgressBar:
         mouse_pos = pg.mouse.get_pos()
         return self.draw_bar().collidepoint(mouse_pos)
 
+    def add_txt(self):
+        percent = FONT.render(f'{self.progress}%', False, WHITE)
+        s.blit(percent, (self.x + 310, self.y + 10))
+
 
 bar_list = []
 y = 20
@@ -59,8 +65,8 @@ while True:
     for bar in bar_list:
         bar.draw_bar()
         bar.draw_progress()
+        bar.add_txt()
         if bar.collide() and pg.mouse.get_pressed()[0] and bar.progress < 100: bar.progress += 1
 
     clock.tick(30)
     pg.display.update()
-    
